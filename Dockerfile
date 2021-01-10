@@ -1,22 +1,11 @@
-FROM node:10-alpine
+# 2021-01-10 18:28:13
 
-####
-# Install SeaweedFS Client
-####
+FROM node:10-alpine as final
 
-ARG SEAWEEDFS_VERSION=2.14
-ENV SEAWEEDFS_VERSION=$SEAWEEDFS_VERSION
-ARG GOARCH=amd64
-ENV GOARCH=$GOARCH
-
-RUN apk update && \
-    apk add fuse3 && \
-    apk add fuse && \
-    apk add --no-cache --virtual build-dependencies --update wget curl ca-certificates && \
-    wget -qO /tmp/linux_${GOARCH}.tar.gz https://github.com/chrislusf/seaweedfs/releases/download/${SEAWEEDFS_VERSION}/linux_${GOARCH}.tar.gz && \
-    tar -C /usr/bin/ -xzvf /tmp/linux_${GOARCH}.tar.gz && \
-    apk del build-dependencies && \
-    rm -rf /tmp/*
+LABEL mantainer="Gaspare Iengo <gaspare@katapy.com>"
+RUN \
+  apk add --no-cache --update fuse3 fuse && \
+  rm -rf /tmp/*
 
 ####
 # Install Docker volume driver API server
@@ -41,7 +30,7 @@ ENV HOST=mfsmaster \
     ALIAS=seaweedfs \
     ROOT_VOLUME_NAME="" \
     MOUNT_OPTIONS="" \
-    REMOTE_PATH=/docker/volumes \
+    REMOTE_PATH=/.docker/volumes \
     LOCAL_PATH="" \
     CONNECT_TIMEOUT=10000 \
     LOG_LEVEL=info
@@ -51,3 +40,12 @@ COPY index.js /project
 
 # Set the Docker entrypoint
 ENTRYPOINT ["node", "index.js"]
+
+####
+# Install SeaweedFS Client
+####
+
+COPY --from=gasparekatapy/seaweedfs /usr/bin/weed /usr/bin/
+
+FROM final AS final_large
+COPY --from=gasparekatapy/seaweedfs:large /usr/bin/weed /usr/bin/

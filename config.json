@@ -33,7 +33,7 @@
       "settable": [
         "value"
       ],
-      "value": "/docker/volumes"
+      "value": "/.docker/volumes"
     },
     {
       "name": "LOG_LEVEL",
