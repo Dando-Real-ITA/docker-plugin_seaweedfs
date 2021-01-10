@@ -1,10 +1,8 @@
 # SeaweedFS Docker Plugin
 
-> :warning: **Warning:** This project is not maintained and may not be properly functioning. PRs and forks are welcome, but there are no guarantees to the current state of this plugin or its effectiveness. You may be interested in checking out the @onaci fork: https://github.com/onaci/docker-plugin-seaweedfs.
-
 > **Note:** This plugin was forked from a [LizardFS Docker Plugin](https://github.com/kadimasolutions/docker-plugin_lizardfs) so there may still be references to LizardFS somewhere in here that I haven't found and replaced yet.
 
-A Docker volume driver plugin for mounting a [SeaweedFS](https://github.com/chrislusf/seaweedfs) filesystem. Allows you to transparently provide storage for your Docker containers using SeaweedFS. This plugin can be used in combination with the [SeaweedFS Docker Image](https://github.com/chrislusf/seaweedfs/tree/master/docker) to create a fully containerized, clustered storage solution for Docker Swarm. Documentation and development are still in progress.
+A Docker volume driver plugin for mounting a [SeaweedFS](https://github.com/Dando-Real-ITA/seaweedfs) filesystem. Allows you to transparently provide storage for your Docker containers using SeaweedFS. This plugin can be used in combination with the [SeaweedFS Docker Image](https://github.com/Dando-Real-ITA/seaweedfs/tree/develop/docker) to create a fully containerized, clustered storage solution for Docker Swarm. Documentation and development are still in progress.
 
 ## Usage
 
@@ -13,7 +11,7 @@ A Docker volume driver plugin for mounting a [SeaweedFS](https://github.com/chri
 Before you can use the plugin you must have:
 
 * A running SeaweedFS cluster with a [Filer](https://github.com/chrislusf/seaweedfs/wiki/Directories-and-Files) that your Docker host can access.
-* A directory on the SeaweedFS filesystem that can be used by the plugin to store Docker volumes. This can be any normal directory. By default the plugin will use `/docker/volumes`, but this can be changed to something else like the root directory, for example ( see [REMOTE_PATH](#remote-path) ).
+* A directory on the SeaweedFS filesystem that can be used by the plugin to store Docker volumes. This can be any normal directory. By default the plugin will use `/.docker/volumes`, but this can be changed to something else like the root directory, for example ( see [REMOTE_PATH](#remote-path) ).
 
 Once these conditions are met you are ready to install the plugin.
 
@@ -21,7 +19,7 @@ Once these conditions are met you are ready to install the plugin.
 
 The plugin is simple use and can be installed as a Docker container without having to install any other system dependencies.
 
-    $ docker plugin install --alias seaweedfs katharostech/seaweedfs-volume-plugin HOST=localhost:8888
+    $ docker plugin install --alias seaweedfs gasparekatapy/seaweedfs_plugin HOST=localhost:8888
 
 Docker will prompt asking if you want to grant the permissions required to run the plugin. Select yes and the plugin will download and install.
 
@@ -55,7 +53,7 @@ etc
 /data $ exit # Exit ( the container will be removed because of the --rm )
 ```
 
-We should now have a copy of the alpine container's whole `/etc` directory on our `weed-vol` volume. You can verify this by checking the `/docker/volumes/weed-vol/` directory on your SeaweedFS installation. You should see the `etc` folder with all of its files and folders in it. Congratulations! You have successfully mounted your SeaweedFS filesytem into a docker container and stored data in it!
+We should now have a copy of the alpine container's whole `/etc` directory on our `weed-vol` volume. You can verify this by checking the `/.docker/volumes/weed-vol/` directory on your SeaweedFS installation. You should see the `etc` folder with all of its files and folders in it. Congratulations! You have successfully mounted your SeaweedFS filesytem into a docker container and stored data in it!
 
 If you run another container, you can mount the same volume into it and that container will also see the data. Your data will stick around as long as that volume exists. When you are done with it, you can remove the volume by running `docker volume rm weed-vol`.
 
@@ -73,8 +71,8 @@ Each SeaweedFS Docker volume maps 1-to-1 to a directory on the SeaweedFS filesys
 
 It is also possible, if you have multiple SeaweedFS clusters, to install the plugin multiple times with different settings for the different clusters. For example, if you have two SeaweedFS clusters, one at `host1` and another at `host2`, you can install the plugin two times, with different aliases, to allow you to create volumes on both clusters.
 
-    $ docker plugin install --alias seaweedfs1 --grant-all-permissions katharostech/seaweedfs-volume-plugin HOST=host1:8888
-    $ docker plugin install --alias seaweedfs2 --grant-all-permissions kadimasolutions/seaweedfs-volume-plugin HOST=host2:8888
+    $ docker plugin install --alias seaweedfs1 --grant-all-permissions gasparekatapy/seaweedfs_plugin HOST=host1:8888
+    $ docker plugin install --alias seaweedfs2 --grant-all-permissions gasparekatapy/seaweedfs_plugin HOST=host2:8888
 
 This gives you the ability to create volumes for both clusters by specifying either `seaweedfs1` or `seaweedfs2` as the volume driver when creating a volume.
 
@@ -90,7 +88,7 @@ The Root Volume also give you the ability to have containers create and remove S
 
 ### Plugin Configuration
 
-You can configure the plugin through plugin variables. You may set these variables at installation time by putting `VARIABLE_NAME=value` after the plugin name, or you can set them after the plugin has been installed using `docker plugin set katharostech/seaweedfs-volume-plugin VARIABLE_NAME=value`.
+You can configure the plugin through plugin variables. You may set these variables at installation time by putting `VARIABLE_NAME=value` after the plugin name, or you can set them after the plugin has been installed using `docker plugin set gasparekatapy/seaweedfs_plugin VARIABLE_NAME=value`.
 
 > **Note:** When configuring the plugin after installation, the plugin must first be disabled before you can set variables. There is no danger of accidentally setting variables while the plugin is enabled, though. Docker will simply tell you that it is not possible.
 
@@ -112,7 +110,7 @@ Options passed to the `weed mount` command when mounting SeaweedFS volumes.
 
 The path on the SeaweedFS filesystem that Docker volumes will be stored in. This path will be mounted for volume storage by the plugin and must exist on the SeaweedFS filesystem.
 
-**Default:** `/docker/volumes`
+**Default:** `/.docker/volumes`
 
 #### ROOT_VOLUME_NAME
 
@@ -148,7 +146,7 @@ After that is finished you can run `make create`.
 
     $ make create
 
-This will install the Docker plugin from the `plugin` dirctory with the name `katharostech/seaweedfs-volume-plugin`.
+This will install the Docker plugin from the `plugin` dirctory with the name `gasparekatapy/seaweedfs_plugin`.
 
 Finally run `make enable` to start the plugin.
 
@@ -197,7 +195,7 @@ When you install a Docker plugin, it is given a plugin ID. You can see the first
 ```
 $ docker plugin ls
 ID                  NAME                                            DESCRIPTION                         ENABLED
-2f5b68535b92        katharostech/seaweedfs-volume-plugin:latest   SeaweedFS volume plugin for Docker   false
+2f5b68535b92        gasparekatapy/seaweedfs_plugin:latest   SeaweedFS volume plugin for Docker   false
 ```
 
 Using that ID you can find where the plugin's rootfs was installed. By default, it should be located in `/var/lib/docker/plugins/[pluginID]/rootfs`. For our particular plugin, the file that we need to replace is the `/project/index.js` file in the plugin's rootfs. By replacing that file with an updated version and restarting ( disabling and re-enabling ) the plugin, you can update the plugin without having to re-install it.
