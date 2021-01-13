@@ -1,4 +1,4 @@
-# 2021-01-10 18:28:13
+# 2021-01-13 18:35:25
 
 FROM node:10-alpine as final
 
@@ -14,6 +14,7 @@ RUN \
 # Create directories for mounts
 RUN mkdir -p /mnt/seaweedfs
 RUN mkdir -p /mnt/docker-volumes
+RUN mkdir -p /run/docker/plugins
 
 # Copy in package.json
 COPY package.json package-lock.json /project/
