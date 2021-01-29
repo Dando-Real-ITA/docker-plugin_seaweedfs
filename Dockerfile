@@ -1,6 +1,6 @@
-# 2021-01-28 21:01:45
+# 2021-01-29 07:55:17
 
-FROM node:10-alpine as final
+FROM node:10-alpine as build
 
 LABEL mantainer="Gaspare Iengo <gaspare@katapy.com>"
 RUN \
@@ -46,7 +46,8 @@ ENTRYPOINT ["node", "index.js"]
 # Install SeaweedFS Client
 ####
 
+FROM build AS final
 COPY --from=gasparekatapy/seaweedfs /usr/bin/weed /usr/bin/
 
-FROM final AS final_large
+FROM build AS final_large
 COPY --from=gasparekatapy/seaweedfs:large /usr/bin/weed /usr/bin/
