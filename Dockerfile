@@ -1,10 +1,10 @@
-# 2021-01-13 18:35:25
+# 2021-01-28 21:01:45
 
 FROM node:10-alpine as final
 
 LABEL mantainer="Gaspare Iengo <gaspare@katapy.com>"
 RUN \
-  apk add --no-cache --update fuse3 fuse && \
+  apk add --no-cache --update fuse fuse3 && \
   rm -rf /tmp/*
 
 ####
