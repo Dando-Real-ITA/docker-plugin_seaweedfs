@@ -1,10 +1,10 @@
-# 2021-01-29 07:55:17
+# 2021-02-11 20:26:56
 
-FROM node:10-alpine as build
+FROM node:alpine as build
 
 LABEL mantainer="Gaspare Iengo <gaspare@katapy.com>"
 RUN \
-  apk add --no-cache --update fuse && \
+  apk add --no-cache --update fuse3 && \
   rm -rf /tmp/*
 
 ####
@@ -17,7 +17,7 @@ RUN mkdir -p /mnt/docker-volumes
 RUN mkdir -p /run/docker/plugins
 
 # Copy in package.json
-COPY package.json package-lock.json /project/
+COPY package.json /project/
 
 # Switch to the project directory
 WORKDIR /project
@@ -26,8 +26,7 @@ WORKDIR /project
 RUN npm install
 
 # Set Configuration Defaults
-ENV HOST=mfsmaster \
-    PORT=9421 \
+ENV HOST=localhost:8888 \
     ALIAS=seaweedfs \
     ROOT_VOLUME_NAME="" \
     MOUNT_OPTIONS="" \

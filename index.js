@@ -7,7 +7,7 @@ const path = require('path')
 const { execFileSync, spawn } = require('child_process')
 
 const http = require('http')
-const terminus = require('@godaddy/terminus')
+const { createTerminus } = require('@godaddy/terminus')
 const express = require('express')
 
 //
@@ -64,7 +64,7 @@ var has_mounted_volume_root = false
 // Logging
 //
 
-const log = require('loglevel-message-prefix')(require('loglevel'), {
+const log = require('@natlibfi/loglevel-message-prefix')(require('loglevel'), {
   prefixes: ['level'],
 })
 
@@ -554,7 +554,7 @@ function onSignal() {
 log.info(`Starting plugin API server at ${bind_address}`)
 
 // Start webserver using terminus for lifecycle management
-terminus(http.createServer(app), {
+createTerminus(http.createServer(app), {
   logger: log.error,
   onSignal,
   onShutdown: () => {
