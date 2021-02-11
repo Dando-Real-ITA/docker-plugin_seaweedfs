@@ -4,7 +4,7 @@ FROM node:10-alpine as build
 
 LABEL mantainer="Gaspare Iengo <gaspare@katapy.com>"
 RUN \
-  apk add --no-cache --update fuse fuse3 && \
+  apk add --no-cache --update fuse3 && \
   rm -rf /tmp/*
 
 ####
