@@ -7,6 +7,9 @@ RUN \
   apk add --no-cache --update fuse3 && \
   rm -rf /tmp/*
 
+WORKDIR /usr/bin
+RUN ln -sfrnv fusermount3 fusermount
+
 ####
 # Install Docker volume driver API server
 ####

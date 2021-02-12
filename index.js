@@ -108,15 +108,19 @@ app.use(function (req, res, next) {
 
     try {
       // Mount SeaweedFS remote path
+      const cmd = [
+        'mount',
+        `-dir=${volume_root}`,
+        `-filer=${process.env['HOST']}`,
+        `-filer.path=${remote_path}`,
+        ...mount_options
+      ];
+
+      log.debug(`Mount command: ${JSON.stringify(cmd)}`)
+
       const proc = spawn(
         'weed',
-        [
-          'mount',
-          `-dir=${volume_root}`,
-          `-filer=${process.env['HOST']}`,
-          `-filer.path=${remote_path}`,
-          ...mount_options
-        ]
+        cmd
       )
 
       proc.stdout.on('data', (data) => {
@@ -272,15 +276,20 @@ app.post('/VolumeDriver.Mount', function (req, res) {
       }
 
       // Mount volume
+      // Mount SeaweedFS remote path
+      const cmd = [
+        'mount',
+        `-dir=${container_mountpoint}`,
+        `-filer=${process.env['HOST']}`,
+        `-filer.path=${mount_remote_path}`,
+        ...mount_options
+      ];
+
+      log.debug(`Mount command: ${JSON.stringify(cmd)}`)
+
       const proc = spawn(
         'weed',
-        [
-          'mount',
-          `-dir=${container_mountpoint}`,
-          `-filer=${process.env['HOST']}`,
-          `-filer.path=${mount_remote_path}`,
-          ...mount_options
-        ]
+        cmd
       )
 
       proc.stdout.on('data', (data) => {
