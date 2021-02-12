@@ -8,7 +8,7 @@ RUN \
   rm -rf /tmp/*
 
 WORKDIR /usr/bin
-RUN ln -sfrnv fusermount3 fusermount
+RUN ln -sfnv fusermount3 fusermount
 
 ####
 # Install Docker volume driver API server
