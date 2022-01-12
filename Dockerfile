@@ -1,6 +1,6 @@
-# 2021-02-11 20:26:56
+# 2022-01-12 12:27:42
 
-FROM node:alpine as build
+FROM registry.hub.docker.com/library/node:alpine as build
 
 LABEL mantainer="Gaspare Iengo <gaspare@katapy.com>"
 RUN \
