@@ -354,7 +354,7 @@ app.post('/VolumeDriver.Unmount', function (req, res) {
   if (mounted_volumes[volume_name].length == 0) {
     try {
       // Unmount the volume
-      execFileSync('umount', [container_mountpoint])
+      execFileSync('umount', ["-lf", container_mountpoint])
 
       // Success
       res.json({})
@@ -532,7 +532,7 @@ function onSignal() {
         log.debug(`Unmounting volume: ${volume_name}`)
 
         // Unmount the volume
-        execFileSync('umount', [path.join(container_volume_path, volume_name)])
+        execFileSync('umount', ["-lf", path.join(container_volume_path, volume_name)])
 
       } catch (err) {
         // Failure
@@ -547,7 +547,7 @@ function onSignal() {
       log.debug(`Unmounting volume root: ${volume_root}`)
 
       // Unmount volume root
-      execFileSync('umount', [volume_root])
+      execFileSync('umount', ["-lf", volume_root])
 
     } catch (err) {
       // Failure
