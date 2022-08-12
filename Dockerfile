@@ -1,4 +1,4 @@
-# 2022-01-12 12:27:42
+# 2022-08-12 00:27:51
 
 FROM registry.hub.docker.com/library/node:alpine as build
 
@@ -50,6 +50,8 @@ ENTRYPOINT ["node", "index.js"]
 
 FROM build AS final
 COPY --from=gasparekatapy/seaweedfs /usr/bin/weed /usr/bin/
+RUN /usr/bin/weed version
 
 FROM build AS final_large
 COPY --from=gasparekatapy/seaweedfs:large /usr/bin/weed /usr/bin/
+RUN /usr/bin/weed version
