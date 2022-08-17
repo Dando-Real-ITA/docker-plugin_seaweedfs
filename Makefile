@@ -18,12 +18,12 @@ config:
 
 rootfs: config
 	@echo "### docker build: rootfs image with"
-	@DOCKER_BUILDKIT=1 docker build --pull \
+	@DOCKER_BUILDKIT=1 docker build --progress=plain --pull \
 		--target final \
 		-t ${PLUGIN_NAME}:rootfs \
 		.
 	@echo "### docker build: rootfs-large image with"
-	@DOCKER_BUILDKIT=1 docker build --pull \
+	@DOCKER_BUILDKIT=1 docker build --progress=plain --pull \
 		--target final_large \
 		-t ${PLUGIN_NAME}:rootfs-large \
 		.
